@@ -6,6 +6,7 @@ performs a selected operation, and displays the result with input validation.
 """
 
 import sys
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -27,26 +28,60 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout()
 
-        # Title
+        # Title label 
         title = QLabel("Simple Calculator")
         title.setStyleSheet("font-size: 20px; font-weight: bold;")
+        #title.setAlignment(Qt.AlignCenter)
 
-        # Inputs (side by side)
+        # Input section
         input_layout = QHBoxLayout()
+        input_layout.setAlignment(Qt.AlignTop)
 
+        # First number input
         self.num1 = QDoubleSpinBox()
         self.num1.setRange(-100000, 100000)
-
-        self.num2 = QDoubleSpinBox()
-        self.num2.setRange(-100000, 100000)
 
         # Operation Dropdown
         self.operation = QComboBox()
         self.operation.addItems(["+", "-", "*", "/"])
+        
+        # Second number input
+        self.num2 = QDoubleSpinBox()
+        self.num2.setRange(-100000, 100000)
 
-        input_layout.addWidget(self.num1)
-        input_layout.addWidget(self.operation)
-        input_layout.addWidget(self.num2)
+        # Labels for inputs 
+        label1 = QLabel("Number 1:")
+        label2 = QLabel("Number 2:")
+
+        # Group first input
+        left_layout = QVBoxLayout()
+        left_layout.addWidget(label1)
+        left_layout.addWidget(self.num1)
+        left_layout.setAlignment(Qt.AlignTop)
+
+        # Group second input 
+        right_layout = QVBoxLayout()
+        right_layout.addWidget(label2)
+        right_layout.addWidget(self.num2)
+        right_layout.setAlignment(Qt.AlignTop)
+
+        # Add to main input row
+        #input_layout.addLayout(left_layout)
+        #input_layout.addWidget(self.operation)
+        #input_layout.addLayout(right_layout)
+
+        # Operation label + layout
+        op_label = QLabel("Operation")
+
+        op_layout = QVBoxLayout()
+        op_layout.addWidget(op_label)
+        op_layout.addWidget(self.operation)
+        op_layout.setAlignment(Qt.AlignTop)
+
+        # Add everything aligned
+        input_layout.addLayout(left_layout)
+        input_layout.addLayout(op_layout)
+        input_layout.addLayout(right_layout)
 
         # Buttons
         calc_button = QPushButton("Calculate")
@@ -72,11 +107,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
     def calculate(self):
+        """Handles calculation and updates output label"""
         num1 = self.num1.value()
         num2 = self.num2.value()
         op = self.operation.currentText()
 
         try:
+            # Perform selected operation
             if op == "+":
                 result = num1 + num2
             elif op == "-":
@@ -90,7 +127,10 @@ class MainWindow(QMainWindow):
                     return
                 result = num1 / num2
 
+            # Round result for cleaner output 
             result = round(result, 2)
+
+            # Display result 
             self.output_label.setStyleSheet("color: black;")
             self.output_label.setText(f"Result: {result}")
 
@@ -99,6 +139,8 @@ class MainWindow(QMainWindow):
             self.output_label.setText("Error: Invalid input")
 
     def clear_all(self):
+        """Resets inputs and output label"""
+
         self.num1.setValue(0)
         self.num2.setValue(0)
         self.output_label.setStyleSheet("color: black;")
