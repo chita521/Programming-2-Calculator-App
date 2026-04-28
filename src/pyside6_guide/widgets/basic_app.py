@@ -31,7 +31,6 @@ class MainWindow(QMainWindow):
         # Title label 
         title = QLabel("Simple Calculator")
         title.setStyleSheet("font-size: 20px; font-weight: bold;")
-        #title.setAlignment(Qt.AlignCenter)
 
         # Input section
         input_layout = QHBoxLayout()
@@ -65,12 +64,7 @@ class MainWindow(QMainWindow):
         right_layout.addWidget(self.num2)
         right_layout.setAlignment(Qt.AlignTop)
 
-        # Add to main input row
-        #input_layout.addLayout(left_layout)
-        #input_layout.addWidget(self.operation)
-        #input_layout.addLayout(right_layout)
-
-        # Operation label + layout
+        # Operation label & layout
         op_label = QLabel("Operation")
 
         op_layout = QVBoxLayout()
